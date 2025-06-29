@@ -1,4 +1,4 @@
-import { Switch } from 'shadcn-ui';
+import {Switch} from '@/components/ui/switch';
 import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {

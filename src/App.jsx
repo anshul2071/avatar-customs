@@ -4,7 +4,7 @@ import { Button } from './components/ui/button';
 import AvatarScene from './components/AvatarScene';
 import AssetSelector from './components/AssetSelector';
 import ThemeToggle from './components/ThemeToggle';
-import {exportGLTF} from './utils/exportGLTF';
+import exportGLTF from './utils/exportGLTF';
 import { toast } from 'sonner';
 
 

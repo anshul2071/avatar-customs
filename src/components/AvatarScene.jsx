@@ -1,4 +1,4 @@
-import { Suspense, use, useRef} from "react";
+import { Suspense, useRef} from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Environment, useGLTF } from "@react-three/drei";
 import useAvatarStore from "@/store/store";
@@ -21,34 +21,43 @@ const AssetModel = ({asset}) => {
 }
 
 
-export default function AvatarScene() {
-
+function RotatingGroup () {
+    const ref = useRef();
     const selections = useAvatarStore(state => state.selections);
-    const sceneRef = useRef();
-
 
     useFrame(() => {
-        if(sceneRef.current) {
-            sceneRef.current.rotation.y += 0.01
+        if(ref.current) {
+            ref.current.rotation.y += 0.01;
         }
     })
+
+    return (
+        <group ref={ref}>
+            <BaseModel />
+            {Object.entries(selections).map(([category, asset]) => (
+                <AssetModel key={category} asset={asset} />
+            ))}
+        </group>
+    );
+
+}
+ 
+export default function AvatarScene() {
 
 
     return (
         <Canvas
            shadows
-           camera={{ position: [0,1.5,3], fov: 50 }} ref={sceneRef}
+           camera={{ position: [0,1.5,3], fov: 50 }}
            >
             <ambientLight intensity={0.5} />
             <directionalLight position={[5, 5, 5]} intensity={1} />
             <Suspense fallback={null}>
-                <BaseModel />
+               <RotatingGroup/>
                 <Environment preset="studio"/>
-                {Object.entries(selections).map(([category, asset]) => (
-                    <AssetModel key={category} asset={asset} />
-                ))}
+               
             </Suspense>
             <OrbitControls enableZoom={false} />
            </Canvas>
-    )
+    );
 }
